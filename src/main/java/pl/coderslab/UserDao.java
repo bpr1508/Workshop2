@@ -1,5 +1,6 @@
 package pl.coderslab;
 
+
 import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.entity.User;
 
@@ -12,7 +13,7 @@ public class UserDao {
     private static final String READ_USER_QUERY =
             "SELECT * FROM users WHERE id=?";
     private static final String COUNT_ROWS =
-            "SELECT COUNT(*) AS COUNT FROM users WHERE id=?";
+            "SELECT COUNT(*) AS count FROM users WHERE id=?";
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -73,20 +74,16 @@ public class UserDao {
     }
 
     public int getQueryRowCount(int id) throws SQLException {
-        int size = 0;
+
         try (Connection conn = DbUtil.getConnection();
              PreparedStatement statement = conn.prepareStatement(COUNT_ROWS, Statement.RETURN_GENERATED_KEYS);) {
             statement.setInt(1, id);
             ResultSet standardRS = statement.executeQuery();
-
+            int size = 0;
             while (standardRS.next()) {
                 size = standardRS.getInt("count");
             }
             return size;
-        } catch(SQLException e){
-            e.printStackTrace();
-            return 0;
         }
-
     }
 }
