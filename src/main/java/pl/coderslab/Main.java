@@ -13,17 +13,19 @@ public class Main {
         UserDao userDao = new UserDao();
         System.out.println("Menu:");
         System.out.println("1. Tworzenie nowego użytkownika.");
-        System.out.println("2. Wczytaj jeden wiersz.");
-        System.out.println("3. Zmień dane użytkownika.");
-        System.out.println("4. Pokaż wszystkie wiersze w tabeli.");
+        System.out.println("2. Wczytaj jeden wiersz o danym id.");
+        System.out.println("3. Zmień dane użytkownika o danym id.");
+        System.out.println("4. Usuń dane użytkownika o danym id.");
+        System.out.println("5. Pokaż wszystkie dane użytkowników.");
         Scanner scanner = new Scanner(System.in);
         while (!scanner.hasNextInt()) {
             scanner.nextLine();
             System.out.println("1. Tworzenie nowego użytkownika.");
-            System.out.println("2. Wczytaj jeden wiersz.");
-            System.out.println("3. Zmień dane użytkownika.");
-            System.out.println("4. Pokaż wszystkie wiersze w tabeli.");
-            System.out.print("Nieprawidłowe dane. Podaj jeszcze raz:");
+            System.out.println("2. Wczytaj jeden wiersz o danym id.");
+            System.out.println("3. Zmień dane użytkownika o danym id.");
+            System.out.println("4. Usuń dane użytkownika o danym id.");
+            System.out.println("5. Pokaż wszystkie dane użytkowników.");
+            System.out.print("Nieprawidłowe dane. Podaj jeszcze raz: ");
         }
         int option = scanner.nextInt();
         switch (option) {
@@ -31,48 +33,30 @@ public class Main {
                 userDao.create(user);
                 break;
             case 2: {
-                int userId = 0;
-                while (!orPositive(userId)) {
-                    userId = inputId();
-                }
+                int userId = userDao.inputId();
                 if(userDao.read(userId)!=null){
                     user = userDao.read(userId);
                     System.out.println(user.getId() + " | " + user.getEmail() + " | " + user.getUsername() + " | " + user.getPassword());
                 } else {
-                    System.out.println("Nie znaleziono takiego id w bazie...");
+                    System.out.println("null");
                 }
             }
             break;
             case 3:
+                userDao.update(user);
                 break;
             case 4:
+                userDao.delete(userDao.inputId());
+                break;
+            case 5:
+                User[] findAll = userDao.findAll();
+                for (int i = 0; i < findAll.length; i++) {
+                    System.out.println(findAll[i]);
+                }
+                break;
             default:
                 System.out.println("Niepoprawna wartość");
+                break;
         }
-    }
-
-    public static boolean validationId(int input) {
-        if (orPositive(input)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean orPositive(int input) {
-        Pattern pattern = Pattern.compile("^[1-9]{1}[0-9]*$");
-        Matcher matcher = pattern.matcher(String.valueOf(input));
-        return matcher.find();
-    }
-
-    public static int inputId() {
-        System.out.print("Podaj liczbę dodatnią: ");
-        Scanner scan = new Scanner(System.in);
-        while (!scan.hasNextInt()) {
-            scan.next();
-            System.out.print("Nieprawidłowe dane. Podaj jeszcze raz:");
-        }
-        int number = scan.nextInt();
-        return number;
     }
 }
