@@ -38,7 +38,6 @@ public class UserDao {
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if (resultSet.next()) {
-
                 user.setId(resultSet.getInt(1));
             }
             return user;
@@ -47,7 +46,6 @@ public class UserDao {
             return null;
         }
     }
-
     public User read(int userId) {
         String[] columnNames = {"id", "email", "username", "password"};
         User user = new User(0, "", "", "");
@@ -72,9 +70,7 @@ public class UserDao {
             return null;
         }
     }
-
     public int getQueryRowCount(int id) throws SQLException {
-
         try (Connection conn = DbUtil.getConnection();
              PreparedStatement statement = conn.prepareStatement(COUNT_ROWS, Statement.RETURN_GENERATED_KEYS);) {
             statement.setInt(1, id);
